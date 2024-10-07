@@ -7,7 +7,6 @@ document.querySelector('.close-btn').addEventListener('click', function() {
     document.querySelector('.login-wrap').style.display = 'none';
 });
 
-// Function to handle user sign-up
 // Function to handle user sign-up with validation
 function signUp() {
     const username = document.getElementById("user-signup").value.trim();
@@ -71,7 +70,10 @@ function signIn() {
     // Check if password matches
     if (user.password === password) {
         alert("Sign in successful!");
-        // Logic for keeping the user signed in could be added here
+        
+        // Redirect to products.html upon successful sign-in
+        window.location.href = 'products.html';
+        
     } else {
         alert("Incorrect password!");
     }
@@ -103,4 +105,32 @@ document.querySelector(".close-btn").addEventListener("click", function() {
 function Alreadyamember() {
     // Set the "Sign In" radio button to checked
     document.getElementById("tab-1").checked = true;
+}
+// Function to handle user sign-in
+function signIn() {
+    const username = document.getElementById("user").value.trim();
+    const password = document.getElementById("pass").value;
+
+    // Retrieve user data from localStorage
+    const user = JSON.parse(localStorage.getItem(username));
+
+    if (!user) {
+        alert("User does not exist!");
+        return;
+    }
+
+    // Check if password matches
+    if (user.password === password) {
+        alert("Sign in successful!");
+        
+        // Redirect to products.html upon successful sign-in
+        window.location.href = 'products.html'
+        
+    } else {
+        alert("Incorrect password!");
+    }
+
+    // Clear sign-in inputs after the attempt
+    document.getElementById("user").value = "";
+    document.getElementById("pass").value = "";
 }
