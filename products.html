@@ -129,6 +129,21 @@
         .productsall{
             background-color: white;
         }
+        .remove-from-cart-button {
+    padding: 10px 20px;
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.remove-from-cart-button:hover {
+    background-color: darkred;
+}
+
     </style>
 </head>
 <body>
@@ -200,6 +215,11 @@
         <i class="fa fa-shopping-cart"></i>
         <span class="cart-count" id="cartCount">0</span>
     </div>
+     <!-- Cart Summary -->
+     <div class="cart-summary" id="cartSummary">
+        <h5>Total: <span id="cartTotal">$0.00</span></h5>
+        <button class="btn btn-primary" id="checkoutButton" onclick="checkout()">Checkout</button>
+    </div>
 
     <!-- Product Grid -->
     <div class="product-container" id="productContainer">
@@ -209,8 +229,12 @@
             <h3 class="product-name">Washing Machine Motor</h3>
             <p class="product-description">High efficiency washing machine motor.</p>
             <div class="product-price">$99.99</div>
+            <!-- Add to Cart Button -->
             <button class="add-to-cart-button" onclick="addToCart('Washing Machine Motor', 99.99)">Add to Cart</button>
+            <!-- Remove from Cart Button -->
+            <button class="remove-from-cart-button" onclick="removeFromCart('Washing Machine Motor', 99.99)">Cancel from Cart</button>
         </div>
+        
 
         <!-- Product 2 -->
         <div class="product-card" data-name="Refrigerator Compressor">
@@ -222,22 +246,26 @@
                 <span class="discount-price">$79.99</span>
             </div>
             <button class="add-to-cart-button" onclick="addToCart('Refrigerator Compressor', 79.99)">Add to Cart</button>
+             <!-- Remove from Cart Button -->
+             <button class="remove-from-cart-button" onclick="removeFromCart('Refrigerator Compressor', 79.99)">Cancel from Cart</button>
         </div>
 
         <div class="product-card" data-name="Air Conditioner Coil">
             <a href="https://imgbb.com/"><img src="https://i.ibb.co/jf9pxm7/shopping.webp" alt="shopping" border="0" width="300px"></a>
-            <h3 class="product-name">Air Conditioner Coil</h3>
-            <p class="product-description">Replacement coil for air conditioners.</p>
+            <h3 class="product-name">Copper pipe coil </h3>
+            <p class="product-description">Replacement leakage </p>
             <div class="product-price">$99.99</div>
-            <button class="add-to-cart-button" onclick="addToCart('Air Conditioner Coil', 99.99)">Add to Cart</button>
+            <button class="add-to-cart-button" onclick="addToCart('Copper pipe coil', 99.99)">Add to Cart</button>
+            <button class="remove-from-cart-button" onclick="removeFromCart('Copper pipe coil', 99.99)">Cancel from Cart</button>
         </div>
 
-        <div class="product-card" data-name="Thermostart">
+        <div class="product-card" data-name="Thermostat">
             <a href="https://imgbb.com/"><img src="https://i.ibb.co/dJ1whp3/shopping-2.webp" alt="shopping-2" border="0" width="240x"></a>
-            <h3 class="product-name">Thermostart</h3>
+            <h3 class="product-name">Thermostat</h3>
             <p class="product-description">Replacement coil for air conditioners.</p>
             <div class="product-price">$99.99</div>
-            <button class="add-to-cart-button" onclick="addToCart('Air Conditioner Coil', 99.99)">Add to Cart</button>
+            <button class="add-to-cart-button" onclick="addToCart('Thermostat', 99.99)">Add to Cart</button>
+            <button class="remove-from-cart-button" onclick="removeFromCart('Thermostat', 99.99)">Cancel from Cart</button>
         </div>
 
         <div class="product-card" data-name="Valve">
@@ -245,7 +273,8 @@
             <h3 class="product-name">Valve</h3>
             <p class="product-description">Replacement for regassing </p>
             <div class="product-price">$99.99</div>
-            <button class="add-to-cart-button" onclick="addToCart('Air Conditioner Coil', 99.99)">Add to Cart</button>
+            <button class="add-to-cart-button" onclick="addToCart('Valve', 99.99)">Add to Cart</button>
+            <button class="remove-from-cart-button" onclick="removeFromCart('Valve', 99.99)">Cancel from Cart</button>
         </div>
 
         <div class="product-card" data-name="Magnetron">
@@ -254,39 +283,95 @@
             <p class="product-description">Replacement for microwaves.</p>
             <div class="product-price">$99.99</div>
             <button class="add-to-cart-button" onclick="addToCart('Air Conditioner Coil', 99.99)">Add to Cart</button>
+            <button class="remove-from-cart-button" onclick="removeFromCart('Magnetron', 99.99)">Cancel from Cart</button>
         </div>
     </div>
 </section>
-    <script>
-        let cart = [];
-        let cartCount = 0;
+<script>
+    let cart = [];
+    let cartCount = 0;
 
-        function addToCart(productName, price) {
-            cart.push({ name: productName, price });
-            cartCount++;
+    function addToCart(productName, price) {
+        cart.push({ name: productName, price });
+        cartCount++;
+        document.getElementById('cartCount').textContent = cartCount;
+        updateCartTotal();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Added to Cart',
+            text: `${productName} has been added to your cart!`,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+    function removeFromCart(productName, price) {
+        const index = cart.findIndex(item => item.name === productName);
+
+        if (index !== -1) {
+            cart.splice(index, 1);
+            cartCount--;
             document.getElementById('cartCount').textContent = cartCount;
+            updateCartTotal();
+
             Swal.fire({
-                icon: 'success',
-                title: 'Added to Cart',
-                text: `${productName} has been added to your cart!`,
+                icon: 'info',
+                title: 'Removed from Cart',
+                text: `${productName} has been removed from your cart!`,
                 showConfirmButton: false,
                 timer: 1500
             });
         }
+    }
 
-        function filterProducts() {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const productCards = document.querySelectorAll('.product-card');
+    function updateCartTotal() {
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
 
-            productCards.forEach(card => {
-                const productName = card.getAttribute('data-name').toLowerCase();
-                if (productName.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+        // Show or hide cart summary based on items in cart
+        const cartSummary = document.getElementById('cartSummary');
+        if (cartCount > 0) {
+            cartSummary.style.display = 'block';
+        } else {
+            cartSummary.style.display = 'none';
+        }
+    }
+
+    function checkout() {
+        if (cartCount > 0) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Checkout Successful',
+                text: 'Thank you for your purchase!',
+                confirmButtonText: 'OK'
+            });
+            // Clear cart
+            cart = [];
+            cartCount = 0;
+            document.getElementById('cartCount').textContent = cartCount;
+            updateCartTotal();
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No Items in Cart',
+                text: 'Please add items to your cart before checking out.',
+                confirmButtonText: 'OK'
             });
         }
-    </script>
+    }
+
+    function filterProducts() {
+        const searchBar = document.getElementById('searchBar').value.toLowerCase();
+        const products = document.querySelectorAll('.product-card');
+
+        products.forEach(product => {
+            const productName = product.getAttribute('data-name').toLowerCase();
+            product.style.display = productName.includes(searchBar) ? 'block' : 'none';
+        });
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
